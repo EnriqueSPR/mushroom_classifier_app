@@ -51,12 +51,15 @@ st.markdown("---")
 expander_bar = st.beta_expander("About", expanded=True)
 expander_bar.markdown("""
 * **Python libraries used:** pandas, numpy, streamlit, PIL, keras (2.4.0).
-* **Data**: Pictures scrapped from the web.
+* **Data**: Pictures scrapped from google and bing search engines.
 * **Author**: Enrique Alcalde [Find out more about this project](https://enriquespr.github.io/Enrique_portfolio_web/post/project_1/) 🙋🏽‍♂️.
 ---
 """)
 
-col1.subheader("Input")
+col1.markdown("""### Instructions:
+> 1. Choose one model
+> 2. Upload you mushroom picture""")
+
 models_list = ["Inception Resnet V2", "Xception"]
 selected_model = col1.selectbox("Select the Model", models_list)
 
@@ -99,7 +102,7 @@ def top_5_predictions(array, class_list):
     class_3 = class_list[inx[2]]
     class_4 = class_list[inx[3]]
     class_5 = class_list[inx[4]]
-    
+
     return st.code("Top 1 Prediction: With {:4.1f}% probability is a picture of {}.\nTop 2 Prediction: With {:4.1f}% probability is a picture of {}.\nTop 3 Prediction: With {:4.1f}% probability is a picture of {}.\nTop 4 Prediction: With {:4.1f}% probability is a picture of {}.\nTop 5 Prediction: With {:4.1f}% probability is a picture of {}."
                  .format(top_1, class_1, top_2, class_2, top_3, class_3, top_4, class_4, top_5, class_5))
 
@@ -108,11 +111,6 @@ def model_load(path):
     model = keras.models.load_model(path)
     return model
 
-ima = Image.open("Coprinopsis_cineirea.jpeg")
-newsize = (250, 250) 
-resized = ima.resize(newsize) 
-shown_pic = st.image(resized, caption='Upload on the left a "Mistery Mushroom" such as this one')
-shown_pic
 
 if uploaded_file:
     ima = Image.open(uploaded_file)
@@ -120,7 +118,6 @@ if uploaded_file:
         newsize = (250, 250) 
         resized = ima.resize(newsize) 
         shown_pic = st.image(resized, caption='Mistery Mushroom')
-        shown_pic
         st.write("")
         st.info("Classifying...")
 
@@ -131,7 +128,6 @@ if uploaded_file:
         list_classes = pd.read_csv("labels_925.csv")
         list_classes = list(list_classes["Names"])
         
-        st.balloons()
         st.success("See below the top 5 results and the corresponding probability...")
         results = top_5_predictions(predictions_mush, list_classes)
 
@@ -149,7 +145,6 @@ if uploaded_file:
         list_classes = pd.read_csv("labels_933.csv")
         list_classes = list(list_classes["Names"])
        
-        st.balloons()
         st.success("See below the top 5 results and the corresponding probability...")
         top_5_predictions(predictions_mush, list_classes)
 
