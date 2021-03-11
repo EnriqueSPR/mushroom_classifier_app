@@ -117,7 +117,7 @@ if uploaded_file:
         st.write("")
         st.info("Classifying...")
 
-        path = "models/my_mushroom_model_inception_resnet.h5"
+        path = "my_mushroom_model_inception_resnet.h5"
         Inception_Resnet = model_load(path)
         prepared_img = prepare_image_Inception_Resnet(ima)
         predictions_mush = Inception_Resnet.predict(prepared_img)
@@ -135,7 +135,7 @@ if uploaded_file:
         st.write("")
         st.info("Classifying...")
 
-        path = "models/my_mushroom_model_xception_sgd_.h5"
+        path = "my_mushroom_model_xception_sgd_.h5"
         Xception = model_load(path)
         prepared_img = prepare_image_Inception_Resnet(ima)
         predictions_mush = Xception.predict(prepared_img)
