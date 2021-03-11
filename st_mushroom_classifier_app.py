@@ -30,7 +30,10 @@ st.markdown("""## **An App to classify mushrooms 🍄**""")
 # Description
 st.markdown("""
 
-**Description**: This app was built to classify pictures of mushrooms.
+**Description**: This app was built to classify pictures of mushrooms. \n
+Two CNNs were trained on a total of 154.000 pictures (size=600x600) from a total of 933 species:
+* 1. Based on the [Inception Resnet V2 architecture](https://keras.io/api/applications/inceptionresnetv2/) (Trainable params: 70,857,725).
+* 2. Based on the [Xception architecture](https://keras.io/api/applications/xception/) (Trainable params: 39,502,029).
 
 """)
 
@@ -54,7 +57,7 @@ expander_bar.markdown("""
 """)
 
 col1.subheader("Input")
-models_list = ["Xception"]
+models_list = ["Inception Resnet V2", "Xception"]
 selected_model = col1.selectbox("Select the Model", models_list)
 
 # component to upload images
@@ -105,8 +108,32 @@ def model_load(path):
     model = keras.models.load_model(path)
     return model
 
+ima = Image.open("Coprinopsis_cineirea.jpeg")
+newsize = (250, 250) 
+resized = ima.resize(newsize) 
+shown_pic = st.image(resized, caption='Upload on the left a "Mistery Mushroom" such as this one')
+shown_pic
+
 if uploaded_file:
     ima = Image.open(uploaded_file)
+    if selected_model == "Inception Resnet V2":
+        newsize = (250, 250) 
+        resized = ima.resize(newsize) 
+        shown_pic = st.image(resized, caption='Mistery Mushroom')
+        shown_pic
+        st.write("")
+        st.info("Classifying...")
+
+        path = "my_mushroom_model_inception_resnet.h5"
+        Inception_Resnet = model_load(path)
+        prepared_img = prepare_image_Inception_Resnet(ima)
+        predictions_mush = Inception_Resnet.predict(prepared_img)
+        list_classes = pd.read_csv("labels_925.csv")
+        list_classes = list(list_classes["Names"])
+        
+        st.balloons()
+        st.success("See below the top 5 results and the corresponding probability...")
+        results = top_5_predictions(predictions_mush, list_classes)
 
     if selected_model == "Xception":
         newsize = (250, 250) 
